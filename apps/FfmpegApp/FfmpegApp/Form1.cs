@@ -10,8 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FfmpegApp.Models;
-using MediaToolkit;
-using MediaToolkit.Model;
+//using MediaToolkit;
+//using MediaToolkit.Model;
+using NReco.VideoConverter;
 
 namespace FfmpegApp
 {
@@ -163,42 +164,45 @@ namespace FfmpegApp
             SetOutputType("mp3", (Button)sender);
         }  
 
-        private void ConvertProgressEvent(object sender, MediaToolkit.ConvertProgressEventArgs e)
-        {
-            pbFileConversion.Invoke(new Action(() => 
-                                        {
-                                            pbFileConversion.Value = (int)(e.ProcessedDuration.TotalMilliseconds / e.TotalDuration.TotalMilliseconds * 100);                                            
-                                        }));
+        //private void ConvertProgressEvent(object sender, MediaToolkit.ConvertProgressEventArgs e)
+        //{
+        //    pbFileConversion.Invoke(new Action(() => 
+        //                                {
+        //                                    pbFileConversion.Value = (int)(e.ProcessedDuration.TotalMilliseconds / e.TotalDuration.TotalMilliseconds * 100);                                            
+        //                                }));
             
-        }
+        //}
 
-        private void ConversionCompleteEvent(object sender, ConversionCompleteEventArgs e)
-        {
-            pbFileConversion.Invoke(new Action(() =>
-            {
-                pbFileConversion.Value = 0;
-            }));
-        }
+        //private void ConversionCompleteEvent(object sender, ConversionCompleteEventArgs e)
+        //{
+        //    pbFileConversion.Invoke(new Action(() =>
+        //    {
+        //        pbFileConversion.Value = 0;
+        //    }));
+        //}
 
         private string ConvertFile(ConvertFileDetails convertFileDetails) 
         {
             try
             {
-                using (var engine = new Engine())
-                {
-                    var inputFile = new MediaFile { Filename = convertFileDetails.InputFilePath };
-                    var outputFile = new MediaFile { Filename = convertFileDetails.OutputFilePath };
+                var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+                ffMpeg.ConvertMedia(convertFileDetails.InputFilePath, convertFileDetails.OutputFilePath, Format.mp4);
+                return "Success";
+                //using (var engine = new Engine())
+                //{
+                //    var inputFile = new MediaFile { Filename = convertFileDetails.InputFilePath };
+                //    var outputFile = new MediaFile { Filename = convertFileDetails.OutputFilePath };
 
 
-                    engine.ConvertProgressEvent += ConvertProgressEvent;
-                    engine.ConversionCompleteEvent += ConversionCompleteEvent;
+                //    engine.ConvertProgressEvent += ConvertProgressEvent;
+                //    engine.ConversionCompleteEvent += ConversionCompleteEvent;
 
-                    engine.Convert(inputFile, outputFile);
+                //    engine.Convert(inputFile, outputFile);
 
-                    Process.Start("explorer.exe", "/select, \"" + convertFileDetails.OutputFilePath + "\"");
-                    return "Success";
+                //    Process.Start("explorer.exe", "/select, \"" + convertFileDetails.OutputFilePath + "\"");
+                //    return "Success";
 
-                }
+                //}
             }
             catch
             {
