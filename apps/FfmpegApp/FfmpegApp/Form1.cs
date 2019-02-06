@@ -55,8 +55,7 @@ namespace FfmpegApp
                 MessageBox.Show("File conversion completed.");
                 EnableActionButtons();
 
-                //LaunchCommandLineApp(txtInputFile.Text, output);
-
+                
             }
             
         }
@@ -69,28 +68,6 @@ namespace FfmpegApp
         private void EnableActionButtons()
         {
             convertButton.Enabled = folderOpenButton.Enabled = openFileButton.Enabled = true;
-        }
-
-        private void LaunchCommandLineApp(string input, string outputFile)
-        {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.CreateNoWindow = false;
-            startInfo.UseShellExecute = false;
-            startInfo.FileName = "ffmpeg.exe";
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = $"-i \"{input}\" \"{outputFile}\"";
-
-            try
-            {
-                using (Process exeProcess = Process.Start(startInfo))
-                {
-                    exeProcess.WaitForExit();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
         }
 
         private void openFileButton_Click(object sender, EventArgs e)
